@@ -1,0 +1,7 @@
+.todo-btn-important {
+    margin-right: 5px;
+}
+.todo-btn-container {
+    display: flex;
+    justify-content: space-between;
+}

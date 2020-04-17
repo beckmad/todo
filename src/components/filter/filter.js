@@ -17,7 +17,7 @@ class Filter extends Component {
             <div className='row todo-row'>
                 <input onChange={this.changeText} className='form-control col mr-1'
                        placeholder='Search' value={this.state.text}/>
-                <Buttons className='col'/>
+                <Buttons className='col' onActive={this.props.onActive} filterStatus={this.props.filterStatus}/>
             </div>
         )
     }

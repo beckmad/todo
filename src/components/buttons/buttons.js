@@ -1,24 +1,27 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-export default class Buttons extends Component {
-    state = {
-        All: true,
-        Active: false,
-        Done: false
-    };
-
-    doActive = () => {
-        console.log(this);
-    };
-
-    render() {
+const Buttons = (props) => {
+    const buttons = [
+        {name: 'all', label: 'All'},
+        {name: 'active', label: 'Active'},
+        {name: 'done', label: 'Done'}
+    ];
+    const buttonsHtml = buttons.map(({name, label}) => {
+        const isActive = props.filterStatus === name;
+        const clazz = 'btn ' + (isActive ? 'btn-secondary' : 'btn-outline-secondary');
         return (
-            <div className='btn-group'>
-                <button className='btn btn-outline-secondary active' type='button'>All</button>
-                <button className='btn btn-outline-secondary' type='button'>Active</button>
-                <button className='btn btn-outline-secondary' type='button'>Done</button>
-            </div>
+            <button type='button' className={clazz}
+                    onClick={() => props.onActive(name)} key={name}>
+                {label}</button>
         )
-    }
-}
+    });
+
+    return (
+        <div className='btn-group'>
+            {buttonsHtml}
+        </div>
+    );
+};
+
+export default Buttons;
 

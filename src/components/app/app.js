@@ -12,13 +12,17 @@ export default class App extends Component {
     state = {
         data: [
             {label: 'CSS', id: 1, done: true},
-            {label: 'HTML', id: 2, done: true},
+            {label: 'HTML', id: 2, },
             {label: 'JavaScript', id: 3, important: true, done: true},
-            {label: 'In process React', id: 4, important: true}
+            {label: 'React', id: 4, important: true},
+            {label: 'Babel', id: 7, important: true, done: true},
+            {label: 'Git', id: 9},
+            {label: 'Algorithms data structures', id: 10, important: true}
         ],
-        searchText: ''
+        searchText: '',
+        activeFilter: 'all' // active, done
     };
-    uniqKey = 5;
+    uniqKey = 1000;
     deleteItem = (id) => {
         this.setState((state) => {
             const index = state.data.findIndex(e => e.id === id);
@@ -36,9 +40,7 @@ export default class App extends Component {
         const obj = {label: txt, id: this.uniqKey++};
         currentData.push(obj);
 
-        this.setState((state) => {
-            return {data: currentData};
-        })
+        this.setState({data: currentData});
     };
     doImportant = (id) => {
         this.setState((state) => {
@@ -54,10 +56,7 @@ export default class App extends Component {
                         ...state.data.slice(index + 1)
                     ]
             }
-
         });
-
-
     };
     doDone = (id) => {
         this.setState((state) => {
@@ -81,20 +80,35 @@ export default class App extends Component {
     updateSearchTxt = (txt) => {
         this.setState({searchText: txt})
     };
-    filter = (items, txt) => {
+    filterSearch = (items, txt) => {
         if (txt.length === 0) {
             return items;
         }
         return items.filter(item => item.label.toUpperCase().indexOf(txt.toUpperCase()) > -1);
     };
+    filterBtns = (items, status) => {
+        if (status === 'all') {
+            return items;
+        } else if (status === 'active') {
+            return items.filter(item => !item.done);
+        } else if (status === 'done') {
+            return items.filter(item => item.done);
+        } else {
+            return items;
+        }
+    };
+    onActive = (activeBtn) => {
+        this.setState({activeFilter: activeBtn});
+    };
 
     render() {
-        const {data, searchText} = this.state;
-        const filtered = this.filter(data, searchText);
+        const {data, searchText, activeFilter} = this.state;
+        const filtered = this.filterSearch(this.filterBtns(data, activeFilter), searchText);
+
         return (
             <div className='todo-app'>
                 <Header/>
-                <Filter updateSearchTxt={this.updateSearchTxt}/>
+                <Filter updateSearchTxt={this.updateSearchTxt} onActive={this.onActive} filterStatus={this.state.activeFilter}/>
                 <List items={filtered} onDeleted={this.deleteItem} onDone={this.doDone}
                       onImportant={this.doImportant}/>
                 <Add onAdded={this.addItem}/>

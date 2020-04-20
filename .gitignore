@@ -7,7 +7,7 @@
 # production
 /build
 
-# misc
+# other
 .DS_Store
 .idea
 package-lock.json
